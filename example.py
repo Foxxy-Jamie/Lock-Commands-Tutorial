@@ -33,7 +33,7 @@ class COG_NAME_HERE(commands.Cog):
                         return True
         return commands.check(check_locks)
     
-#! REMEMBER TO CHANGE "level.db" TO YOUR DATABASE NAME
+#! REMEMBER TO CHANGE "main.db" TO YOUR DATABASE NAME
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -65,7 +65,7 @@ class COG_NAME_HERE(commands.Cog):
     @commands.command()
     @locked()
     async def testloc(self, ctx):
-        await ctx.send("Locked Failed")
+        await ctx.send("OOP I did something")
 
 #! REMEMBER TO CHANGE THE <COG_NAME_HERE> AT THE BOTTOM AND TOP OF THE PAGE
 
