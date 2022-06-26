@@ -3,35 +3,33 @@ import aiosqlite
 import nextcord
 from nextcord.ext import commands
 
-#* If needing the required Python Packages just do:
-#* pip install nextcord
-#* pip install aiosqlite
-
 #! THIS DOES NOT START YOUR BOT. THIS IS A COG FILE
-#! THE locked() check only works for this cog so far. Just copy and paste into other Cog files. (Dont need to copy and paste the commands.) 
-
 # DO NOT PUT locked() CHECK ON MODERATION COMMANDS. 
+
+#To use in other Cog Files do:
+from COG_FOLDER_NAME.FILENAME import locked
+#If needing Help Join Hatake Blustone Here: https://discord.gg/tJjs7yfY4R
+
+
+#Checks to see if the Bot is Locked to a Channel
+def locked():
+    async def check_locks(ctx):
+        async with aiosqlite.connect('main.db') as db:
+            async with db.cursor() as cursor:
+                await cursor.execute("SELECT channel FROM bot_lock WHERE guild = ?", (ctx.guild.id,))
+                check1 = await cursor.fetchone()
+                if check1 == None:
+                    return True
+                elif check1[0] != ctx.channel.id:
+                    return False
+                else:
+                    return True
+    return commands.check(check_locks)
 
 class COG_NAME_HERE(commands.Cog):
     """Cog Description Here"""
     def __init__(self,bot):
         self.bot = bot
-    
-
-    #Checks to see if the Bot is Locked to a Channel
-    def locked():
-        async def check_locks(ctx):
-            async with aiosqlite.connect('main.db') as db:
-                async with db.cursor() as cursor:
-                    await cursor.execute("SELECT channel FROM bot_lock WHERE guild = ?", (ctx.guild.id,))
-                    check1 = await cursor.fetchone()
-                    if check1 == None:
-                        return True
-                    elif check1[0] != ctx.channel.id:
-                        return False
-                    else:
-                        return True
-        return commands.check(check_locks)
     
 #! REMEMBER TO CHANGE "main.db" TO YOUR DATABASE NAME
 
