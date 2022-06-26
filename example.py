@@ -57,7 +57,20 @@ class COG_NAME_HERE(commands.Cog):
                 await self.client.db.commit()
                 return
             else:
-                return await ctx.reply("there was an error")
+                return await ctx.reply("I am Already Locked")
+    
+    @commands.command()
+    async def unlockbot(self, ctx):
+        async with self.client.db.cursor() as cursor:
+            await cursor.execute("SELECT channel FROM bot_lock WHERE guild = ?", (ctx.guild.id,))
+            check1 = await cursor.fetchone()
+            if check1 is None:
+                return ctx.reply("I was never locked :confused:")
+            else:
+                await cursor.execute("DELETE FROM bot_lock WHERE guild = ?", (ctx.guild.id,))
+                await ctx.reply("I have been allowed to roam free once again")
+                await self.client.db.commit()
+                return
 
 #* The Locked Check will connect to your database where it will return true or false
 #* If the return is False it will start the CheckFailure Error. 
@@ -68,9 +81,6 @@ class COG_NAME_HERE(commands.Cog):
         await ctx.send("OOP I did something")
 
 #! REMEMBER TO CHANGE THE <COG_NAME_HERE> AT THE BOTTOM AND TOP OF THE PAGE
-
-PLEASE NOTE:
-  # Unlock Command is Being Made
 
 def setup(bot):
     bot.add_cog(COG_NAME_HERE(bot))     
